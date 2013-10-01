@@ -7,7 +7,7 @@ In this tutorial, we are going to build a custom Map part, that can be configure
 
 > **Important:** Before you can generate the file structure for your module, you need to download, install, and enable the **Code Generation** feature for Orchard. For more information, see [Command-line Code Generation](Command-line-scaffolding).
 
-We are going to add a new "Maps" module to contain our Map part implementation, as a new project in the Orchard solution.  Assuming you have enlisted in the Orchard source tree, launch Visual Studio 2010 and open the Orchard.sln file under the "src" folder of your enlistment.
+We are going to add a new "Maps" module to contain our Map part implementation, as a new project in the Orchard solution.  Assuming you have enlisted in the Orchard source tree, launch Visual Studio 2012 and open the Orchard.sln file under the "src" folder of your enlistment.
 
 ![](../Upload/screenshots/vs_soln_explorer.png)
 
@@ -43,7 +43,7 @@ Open the Module.txt file at the root of the Maps module project.  This file defi
             Category: Geolocation
 
 
-Now let's begin to write the Map part.  To begin with, we need a class to contain the data for the part. Data classes are conventionally added to the "Models" folder of the project.  Right-click the Models folder in Visual Studio and choose "Add > Class" from the context menu and name the new file Map.cs:
+Now let's begin to write the Map part.  To begin with, we need a class to contain the data for the part. Data classes are conventionally added to the "Models" folder of the project.  Right-click the Models folder in Visual Studio and choose "Add > Class" (or "Add > Add New Item ..." to bring up the "Add New Item" dialog box; then select "Class" under "Visual C#") from the context menu and name the new file Map.cs:
 
 ![](../Upload/screenshots_675/vs_add_model_class.png)
 
@@ -92,11 +92,11 @@ To create a new data migration class, you can use the Code Generation feature of
     Data migration created successfully in Module Maps
 
 
-Visual Studio prompts to re-load the solution again.  After accepting this prompt, the new data migration classes appears in the project.
+Visual Studio prompts to re-load the solution again.  After accepting this prompt, the new data migration class appears in the project.
 
 ![](../Attachments/Writing-a-content-part/vs_sol_migration.PNG)
 
-The migration class added by the codegen command contains a single Create() method that defines a database table structure based on the Record classes in project.  Because we only have a single MapRecord class with latitude and longitude properties, the migration class is fairly simple.  Note that the Create method is called at the time the feature is activated, and the database will be updated accordingly.
+The migration class added by the codegen command contains a single (empty) Create() method that defines a database table structure based on the Record classes in project.  Because we only have a single MapRecord class with latitude and longitude properties, the migration class is fairly simple.  Note that the Create method is called at the time the feature is activated, and the database will be updated accordingly.
 
     
     using System;
@@ -129,9 +129,9 @@ The migration class added by the codegen command contains a single Create() meth
     }
 
 
-Add the AlterPartDefinition lines to the migration in order to make the part attachable to any content type. Also add `using Maps.Models;` to the top of the file.
+Copy the above code inside of the Create() method to your class, and add the AlterPartDefinition lines to the migration in order to make the part attachable to any content type. Also add `using Maps.Models;` to the top of the file.
 
-Now let's add the handler for the Map part.  A handler in Orchard is a class that defines the behavior of the part, handling events or manipulating data model prior to rendering the part.  The Map part is very simple, and in this case, our handler class will only specify that an IRepository of MapRecord should be used as the storage for this part. Add the following Handlers\MapHandler.cs:
+Now let's add the handler for the Map part.  A handler in Orchard is a class that defines the behavior of the part, handling events or manipulating data model prior to rendering the part.  The Map part is very simple, and in this case, our handler class will only specify that an IRepository of MapRecord should be used as the storage for this part. Create a 'Handlers' folder in the root of your Maps module. Add the following Handlers\MapHandler.cs:
 
     
     using Maps.Models;
@@ -147,7 +147,7 @@ Now let's add the handler for the Map part.  A handler in Orchard is a class tha
     }
 
 
-We will also add a driver for our Map part.  A driver in Orchard is a class that can define associations of shapes to display for each context in which the Map part can render.  For example, when displaying a Map on the front-end, a "Display" method defines the name of the template to use for different displayTypes (for example, "details" or summary").  Similarly, an "Editor" method of the driver defines the template to use for displaying the editor of the Map part (for entering values of the latitude and longitude fields).  We are going to keep this part simple and just use "Map" as the name of the shape to use for both Display and Editor contexts (and all displayTypes).  Add the Drivers\MapDriver class as follows.
+We will also add a driver for our Map part.  A driver in Orchard is a class that can define associations of shapes to display for each context in which the Map part can render.  For example, when displaying a Map on the front-end, a "Display" method defines the name of the template to use for different displayTypes (for example, "details" or summary").  Similarly, an "Editor" method of the driver defines the template to use for displaying the editor of the Map part (for entering values of the latitude and longitude fields).  We are going to keep this part simple and just use "Map" as the name of the shape to use for both Display and Editor contexts (and all displayTypes). Again, create a 'Drivers' folder to the root of the Maps module, and add the Drivers\MapDriver.cs class as follows:
 
     
     using Maps.Models;
